@@ -35,12 +35,19 @@ User_database(:,3) = sqrt(User_database(:,1).*User_database(:,1) + User_database
 %%%%%%%%%%%%%%%
 % Cost-231 Model (also known as COST-Hata-Model) 
 % http://mobilityfirst.winlab.rutgers.edu/~narayan/Course/Wless/Lecture_3_RadioPropagationModel_Sneha.pdf
-A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts) % a(hm) need to be clarified
-B = 44.9 - 6.55*log10(H_bts)
-C = 0 % 0 for medium-seze city and suburban; 3 for metropolitancenters
+A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts); % a(hm) need to be clarified
+B = 44.9 - 6.55*log10(H_bts);
+C = 0; % 0 for medium-seze city and suburban; 3 for metropolitancenters
 Pathloss_formula = A + B*log10(User_database(:,3)) + C;  %(dB)
 
+figure 1;
+  distance=linspace(0,20000,1000); % 0 -20Km, 1K sample
+  title(['Cost-231 Model, Fc=' num2str(Fc) ', H_bts=' num2str(H_bts)])
+  plot(distance,A + B*log10(distance) + C)
+  xlabel('Distance in meter')
+  ylabel('Pathloss in Db')
 
 User_database(:,4) = Tx_EiRP - Pathloss_formula; % Recieved power by user
 
-scatter(User_database(:,1),User_database(:,2)); %%plot user positions
+figure 2;
+  scatter(User_database(:,1),User_database(:,2)); %%plot user positions
