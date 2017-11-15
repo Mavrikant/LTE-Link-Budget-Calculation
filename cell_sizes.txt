@@ -1,0 +1,5 @@
+Cell Sizes
+
+Macro-cellular networks cell sizes usually range from 1 to 20 km.
+Micro-cellular networks have cell sizes of 400 meters to 2 km, and
+Pico-cellular nets have cell sizes of 4 to 200 meters.
