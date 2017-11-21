@@ -14,7 +14,7 @@ close all;
 Fc = 1800; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
 H_bts = 40; % Height of BTS
 UE_number = 1000; % User equipment (phone, tablet ...) number
-Threshold= -200 ; % UE connection threshold (Db)
+Threshold= -210 ; % UE connection threshold (Db)
 Tx_power = 46; % BTS power (dBm)  
 Tx_a_gain = 18; % Antenna gain (dBi)
 Tx_c_loss = 2.5; % Antenna  cable loss (dB)
@@ -40,7 +40,8 @@ A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts); % a(hm) need to be clarified
 B = 44.9 - 6.55*log10(H_bts);
 C = 0; % 0 for medium-size city and suburban; 3 for metropolitan centers
 Pathloss_formula = A + B*log10(UE_database(:,3)) + C;  %(dB)
-UE_database(:,4) = Tx_EiRP - Pathloss_formula - 8*randn(UE_number,1);% Recieved power by user (BTS power - Pathloss - Shadowing)
+Shadowing_eff = lognrnd(0,3,[UE_number,1]); % http://morse.colorado.edu/~tlen5510/text/classwebch4.html
+UE_database(:,4) = Tx_EiRP - Pathloss_formula - Shadowing_eff ;% Recieved power by user 
 
 figure (1);
     Distance = linspace(0,20000,1000); % 0 -20Km, 1K sample
