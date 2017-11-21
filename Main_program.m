@@ -47,7 +47,7 @@ figure (1);
     plot(Distance, A + B*log10(Distance) + C)
     title(['Cost-231 Model, Fc=' num2str(Fc) ', H-bts=' num2str(H_bts)])
     xlabel('Distance in meter')
-    ylabel('Pathloss in Db')
+    ylabel('Pathloss in dB')
 
 
 Connected_users = find(UE_database(:,4) > Threshold); % Find connected UE_id numbers
