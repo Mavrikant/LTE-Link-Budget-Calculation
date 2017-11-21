@@ -16,8 +16,8 @@ H_bts = 40; % Height of BTS
 UE_number = 1000; % User equipment (phone, tablet ...) number
 Threshold= -200 ; % UE connection threshold (Db)
 Tx_power = 46; % BTS power (dBm)  
-Tx_a_gain = 18; % Anten gain (dBi)
-Tx_c_loss = 2.5; % Anten  cable loss (dB)
+Tx_a_gain = 18; % Antenna gain (dBi)
+Tx_c_loss = 2.5; % Antenna  cable loss (dB)
 Tx_EiRP = Tx_power + Tx_a_gain - Tx_c_loss;% Effective isotropic radiated power (dBm)
 
 UE_database=zeros(UE_number,4); % Matrix for user positions other user related informations
@@ -38,7 +38,7 @@ UE_database(:,3) = sqrt(UE_database(:,1).*UE_database(:,1) + UE_database(:,2).*U
 % http://mobilityfirst.winlab.rutgers.edu/~narayan/Course/Wless/Lecture_3_RadioPropagationModel_Sneha.pdf
 A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts); % a(hm) need to be clarified
 B = 44.9 - 6.55*log10(H_bts);
-C = 0; % 0 for medium-seze city and suburban; 3 for metropolitancenters
+C = 0; % 0 for medium-size city and suburban; 3 for metropolitan centers
 Pathloss_formula = A + B*log10(UE_database(:,3)) + C;  %(dB)
 UE_database(:,4) = Tx_EiRP - Pathloss_formula - 8*randn(UE_number,1);% Recieved power by user (BTS power - Pathloss - Shadowing)
 
@@ -47,7 +47,7 @@ figure (1);
     plot(Distance, A + B*log10(Distance) + C)
     title(['Cost-231 Model, Fc=' num2str(Fc) ', H-bts=' num2str(H_bts)])
     xlabel('Distance in meter')
-    ylabel('Pathloss in dB')
+    ylabel('Pathloss in Db')
 
 
 Connected_users = find(UE_database(:,4) > Threshold); % Find connected UE_id numbers
