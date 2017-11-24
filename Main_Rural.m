@@ -42,7 +42,7 @@ UE_database(:,4) = Tx_EiRP - Pathloss_formula - Shadowing_eff ;% Recieved power 
 
 figure (1);
     Distance = linspace(0,20000,1000); % 0 -20Km, 1K sample
-    plot(Distance, A + B*log10(Distance) + C)
+    plot(Distance, A + B*log10(Distance) - D)
     title(['Hata Model, Fc=' num2str(Fc) ', H-bts=' num2str(H_bts)])
     xlabel('Distance in meter')
     ylabel('Pathloss in Db')
