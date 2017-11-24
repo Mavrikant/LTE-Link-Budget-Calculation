@@ -11,7 +11,7 @@ close all;
 %
 
 
-Fc = 1800; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
+Fc = 900; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
 H_bts = 40; % Height of BTS
 H_ue = 3; % Height of user equipment
 UE_number = 1000; % User equipment (phone, tablet ...) number
@@ -30,7 +30,7 @@ UE_database(:,3) = sqrt(UE_database(:,1).*UE_database(:,1) + UE_database(:,2).*U
 %%%%%%%%
 %Okumura-Hata Model model for open area (Developed by Masaharu Hata after Okumura) (paramaters for rural area)
 
-ahm = (1.1*log10(Fc) - 0.7)*H_ue - 1.56*log10(Fc) - 0.8; % for large cities and 0 for rural
+ahm = (1.1*log10(Fc) - 0.7)*H_ue - 1.56*log10(Fc) - 0.8; % for small or medium-sized city (See Wikipedia : Hata Model)
 A = 69.55 + 26.16*log10(Fc) - 13.82*log10(H_bts) - ahm;
 B = 44.9 - 6.55*log10(H_bts);
 D = 4.78*log10(Fc)^2 - 18.33*log10(Fc) + 40.94;
