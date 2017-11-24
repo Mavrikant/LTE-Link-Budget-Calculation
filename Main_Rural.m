@@ -2,6 +2,7 @@ clc;
 clear variables;
 close all;
 
+rangeblocks=500:500:15000;
 Fc = 900; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
 Cell_size = 15000; % Macro cell (m)
 H_bts = 40; % Height of BTS
@@ -41,7 +42,23 @@ figure (1);
 
 
 Connected_users = find(UE_database(:,4) > Threshold); % Find connected UE_id numbers
-
+for i=1:UE_number
+    if UE_database(i,4)>-80
+        UE_database(i,5)=1;
+    end
+end
+Coverage=zeros(30,3);
+for i=1:UE_number
+    for j=1:30
+        if(UE_database(i,3)<j*500 && UE_database(i,3)>(j-1)*500)
+                Coverage(j,1)=Coverage(j,1)+1;
+            if(UE_database(i,5)==1)
+                Coverage(j,2)=Coverage(j,2)+1;
+            end
+        end
+    end
+end
+Coverage(:,3)=100*Coverage(:,2)./Coverage(:,1);
 figure (2);
     plot(0, 0, 'Ob', 'LineWidth', 3);%BTS at center
     title(['Hata Model, Fc=' num2str(Fc) ', H-bts=' num2str(H_bts) ', threshold=' num2str(Threshold)])
@@ -66,4 +83,7 @@ figure (2);
         histogram(UE_database(:,4))
         title('Histogram of rec')
         grid on;
-    
+    %%    
+    figure (5);
+        plot(rangeblocks,Coverage(:,3));
+       
