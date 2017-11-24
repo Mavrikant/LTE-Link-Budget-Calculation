@@ -13,6 +13,7 @@ close all;
 
 Fc = 1800; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
 H_bts = 40; % Height of BTS
+H_ue = 2; % Height of user equipment
 UE_number = 1000; % User equipment (phone, tablet ...) number
 Threshold= -210 ; % UE connection threshold (Db)
 Tx_power = 46; % BTS power (dBm)  
@@ -27,8 +28,10 @@ UE_database(:,2) = randi([-15000,15000], 1, UE_number); %generate random user po
 UE_database(:,3) = sqrt(UE_database(:,1).*UE_database(:,1) + UE_database(:,2).*UE_database(:,2)); % Calculated distane between user and BTS (meter)
 
 %%%%%%%%
-% Okumura-Hata Model model for open area (Developed by Masaharu Hata after Okumura)
-% A = 69.55 + 26.16*log10(Fc) - 13.82*log10(hb);
+% Okumura-Hata Model model for open area (Developed by Masaharu Hata after
+% Okumura) (paramaters for rural area)
+% ahm = 3.2*(log10(1.75*H_ue))^2 - 4.97 % for large cities
+% A = 69.55 + 26.16*log10(Fc) - 13.82*log10(hb) - ahm;
 % B = 44.9 - 6.55*log10(hb);
 % D = 4.78*log10(Fc)^2 + 18.33*log10(Fc) + 40.94;
 % Pathloss_formula = A + B*log10(UE_database(:,3)) - D; 
@@ -36,7 +39,8 @@ UE_database(:,3) = sqrt(UE_database(:,1).*UE_database(:,1) + UE_database(:,2).*U
 %%%%%%%%%%%%%%%
 % Cost-231 Model (also known as COST-Hata-Model) 
 % http://mobilityfirst.winlab.rutgers.edu/~narayan/Course/Wless/Lecture_3_RadioPropagationModel_Sneha.pdf
-A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts); % a(hm) need to be clarified
+ahm = 3.2*(log10(1.75*H_ue))^2 - 4.97; % for large cities
+A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts) - ahm; 
 B = 44.9 - 6.55*log10(H_bts);
 C = 0; % 0 for medium-size city and suburban; 3 for metropolitan centers
 Pathloss_formula = A + B*log10(UE_database(:,3)) + C;  %(dB)
@@ -59,10 +63,10 @@ figure (2);
     hold on;
     for i=1:UE_number
         if (~isempty(find(Connected_users==i, 1))) == 0
-            plot(UE_database(i,1), UE_database(i,2), '.r'); % Connected
+            plot(UE_database(i,1), UE_database(i,2), '.r'); % Not Connected
             hold on;
         else
-            plot(UE_database(i,1), UE_database(i,2), 'og'); % NOT connected
+            plot(UE_database(i,1), UE_database(i,2), 'og'); % Connected
             hold on;
         end 
     end
