@@ -74,7 +74,7 @@ figure (2);
         xlabel('Received power (dB)');
         ylabel('Count');
         grid on;
-        
+     
 %% Coverage graph
 Sample_size = 1000;       
 Distance = linspace(0, Cell_size, Sample_size); % 0-15Km, 1K sample
