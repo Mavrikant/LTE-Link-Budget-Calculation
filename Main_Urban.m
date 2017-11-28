@@ -39,7 +39,7 @@ UE_database(:,4) = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss; % 
 %% Draw UE positions and their status on map
 figure (1);
     plot(0, 0, '*k', 'LineWidth', 3);%BTS at center
-    title(['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold_voice=' num2str(Threshold_voice) 'dB'])
+    title(['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB'])
     hold on;
     grid on;
     for i=1:UE_number
@@ -63,7 +63,7 @@ figure (1);
 figure (2);
     Distance = linspace(0,Cell_size,1000); % 0-2Km, 1K sample
     plot(Distance, A + B*log10(Distance/1000) + C); % Distance in Km
-    title({'Pathloss vs Distance (Cost-231)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold_voice=' num2str(Threshold_voice) 'dB']});
+    title({'Pathloss vs Distance (Cost-231)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
     xlabel('Distance in meter');
     ylabel('Pathloss in dB');
     clear Distance;
@@ -72,7 +72,7 @@ figure (2);
 %% Cumulative distribution of received power
     figure (3);
         ecdf(UE_database(:,4));
-        title({'Cumulative distribution of received power';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold_voice=' num2str(Threshold_voice) 'dB']});
+        title({'Cumulative distribution of received power';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
         xlabel('Received power (dB)');
         ylabel('Probability');
         grid on;
@@ -80,7 +80,7 @@ figure (2);
 %% Histogram of received power by UE   
     figure (4);
         histogram(UE_database(:,4));
-        title({'Histogram of received power by UE';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold_voice=' num2str(Threshold_voice) 'dB']});
+        title({'Histogram of received power by UE';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
         xlabel('Received power (dB)');
         ylabel('Count');
         grid on;
@@ -100,6 +100,6 @@ figure (5);
     plot (Distance, smooth(Coverage)) % Moving average smoothing
     axis([-inf +inf 0 1]) % fix y axis between 0 and 1
     grid on;
-    title({'Coverage probability vs Distance';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold_voice=' num2str(Threshold_voice) 'dB']});
+    title({'Coverage probability vs Distance';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
     xlabel('Distance (m)');
     ylabel('Probability');
