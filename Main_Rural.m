@@ -35,27 +35,24 @@ Shadowing_eff = normrnd (0,8,[UE_number,1]); % http://morse.colorado.edu/~tlen55
 UE_database(:,4) = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss ;% Received power by UE 
 
 %% Draw UE positions and their status on map
-Connected_users = find(UE_database(:,4) > Threshold_voice); % Find connected UE_id numbers
 figure (1);
     plot(0, 0, '*k', 'LineWidth', 3); % BTS at center
     title(['RURAL, HATA Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB'])
     hold on;
     grid on;
     for i=1:UE_number
-        if isempty(find(Connected_users==i, 1))% Not Connected
-            if UE_database(i,5) %Data 
+        if UE_database(i,5) %Data
+            if UE_database(i,4) > Threshold_data %Connected
+                plot(UE_database(i,1), UE_database(i,2), '*g'); 
+            else % NOT connected
                 plot(UE_database(i,1), UE_database(i,2), '*r'); 
-            else %Voice
-                plot(UE_database(i,1), UE_database(i,2), '.r');  
             end
-            hold on;
-        else % Connected
-            if UE_database(i,5) %Data 
-                plot(UE_database(i,1), UE_database(i,2), '*g');  
-            else %Voice
+        else %Voice
+            if UE_database(i,4) > Threshold_voice %Connected
                 plot(UE_database(i,1), UE_database(i,2), '.g'); 
-            end
-            hold on;
+            else % NOT connected
+                plot(UE_database(i,1), UE_database(i,2), '.r'); 
+            end 
         end 
     end
     
