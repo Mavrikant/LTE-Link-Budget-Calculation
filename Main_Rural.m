@@ -11,7 +11,7 @@ UE_number = floor(UE_density*(Cell_size^2/10^6)); % User equipment (phone, table
 Threshold_voice= -90 ; % UE connection Threshold_voice (Db)
 Threshold_data= -80 ; % UE connection Threshold_data (Db)
 Data_UE_rate = 0.2; % Ratio of data requests by UE
-Tx_power = 40; % BTS power (dBm)  
+Tx_power = 43; % BTS power (dBm)  
 Tx_a_gain = 18; % Antenna gain (dBi)
 Tx_c_loss = 2.5; % Antenna  cable loss (dB)
 Rx_body_loss = 3; % Body loss at reciever side (dB) (User Body Loss Study for Popular Smartphones - http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7228963)

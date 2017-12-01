@@ -6,7 +6,7 @@ Fc = 1800; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(o
 Cell_size = 2000; % Micro cell (m)
 H_bts = 30; % Height of BTS; http://ftp.tiaonline.org/TR-8/TR-8.18.4/Working/WG4-8.18.4_16-05-039-R6%20LTE%20Transmitter%20Characteristics.pdf
 H_ue = 3; % Height of user equipment
-UE_density = 100; %Active user density (/km2)
+UE_density = 1000; %Active user density (/km2)
 UE_number = floor(UE_density*(Cell_size^2/10^6)); % User equipment (phone, tablet ...) number
 Threshold_voice= -90 ; % UE connection Threshold_voice (Db)
 Threshold_data= -80 ; % UE connection Threshold_data (Db)
@@ -33,7 +33,7 @@ A = 46.3 + 33.9*log10(Fc) - 13.82*log10(H_bts) - ahm;
 B = 44.9 - 6.55*log10(H_bts);
 C = 3; % 0 for medium-size city and suburban; 3 for metropolitan centers
 Pathloss_formula = A + B*log10(UE_database(:,3)/1000) + C; % (dB) (distance in Km)
-Shadowing_eff = normrnd (0,12,[UE_number,1]); % http://morse.colorado.edu/~tlen5510/text/classwebch4.html - https://www.quora.com/Wireless-Communication-How-do-we-simulate-Shadow-Fading-using-Matlab-lognrnd-0-%CF%83-or-normrnd-0-%CF%83
+Shadowing_eff = sqrt(8*8)*randn(UE_number,1); % http://morse.colorado.edu/~tlen5510/text/classwebch4.html - https://www.quora.com/Wireless-Communication-How-do-we-simulate-Shadow-Fading-using-Matlab-lognrnd-0-%CF%83-or-normrnd-0-%CF%83
 UE_database(:,4) = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss; % Received   power by UE 
 
 %% Draw UE positions and their status on map
