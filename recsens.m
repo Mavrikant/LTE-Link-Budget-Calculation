@@ -1,4 +1,8 @@
 % noise floor calc https://www.iis.fraunhofer.de/content/dam/iis/en/doc/pr/2012/Full_HD_Voice_engl.pdf
+clc;
+clear variables;
+close all;
+
 
 Temp=293;
 KBoltzman=1.38*(10^(-23));

@@ -31,7 +31,7 @@ A = 69.55 + 26.16*log10(Fc) - 13.82*log10(H_bts) - ahm;
 B = 44.9 - 6.55*log10(H_bts);
 D = 4.78*log10(Fc)^2 - 18.33*log10(Fc) + 40.94;
 Pathloss_formula = A + B*log10(UE_database(:,3)/1000) - D;  %(dB) (distance in Km)
-Shadowing_eff = normrnd (0,8,[UE_number,1]); % http://morse.colorado.edu/~tlen5510/text/classwebch4.html - https://www.quora.com/Wireless-Communication-How-do-we-simulate-Shadow-Fading-using-Matlab-lognrnd-0-%CF%83-or-normrnd-0-%CF%83
+Shadowing_eff = normrnd(0,sqrt(8),[UE_number,1]); % http://morse.colorado.edu/~tlen5510/text/classwebch4.html - https://www.quora.com/Wireless-Communication-How-do-we-simulate-Shadow-Fading-using-Matlab-lognrnd-0-%CF%83-or-normrnd-0-%CF%83
 UE_database(:,4) = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss ;% Received power by UE 
 
 %% Draw UE positions and their status on map
