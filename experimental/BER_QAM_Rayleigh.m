@@ -15,7 +15,7 @@ figure (1)
     hold on;
     semilogy(EbNo,sixty_four_QAM)
     hold on;
-    axis([-inf +inf 0.000001 1])
+    axis([-inf +inf 10^-6 1])
     legend('4QAM','16QAM','64QAM')
     grid on;
     title('Theoretical BER of M-QAM in Rayleigh Fading')
