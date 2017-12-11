@@ -3,18 +3,18 @@ clear variables;
 close all;
 
 Fc = 1800; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
-Cell_size = 2000; % Micro cell (m)
+Cell_size = 5000; % Micro cell (m)
 H_bts = 30; % Height of BTS; http://ftp.tiaonline.org/TR-8/TR-8.18.4/Working/WG4-8.18.4_16-05-039-R6%20LTE%20Transmitter%20Characteristics.pdf
 H_ue = 3; % Height of user equipment
-UE_density = 1000; %Active user density (/km2)
-UE_number = floor(UE_density*(Cell_size^2/10^6)); % User equipment (phone, tablet ...) number
-Threshold_voice= -90 ; % UE connection Threshold_voice (Db)
-Threshold_data= -80 ; % UE connection Threshold_data (Db)
+UE_density = 50; %Active user density (/km2)
+UE_number = floor(UE_density*(4*Cell_size^2/10^6)); % User equipment (phone, tablet ...) number
+Threshold_voice= Rec_sens(1,1) ; % UE connection Threshold_voice (dB)
+Threshold_data= Rec_sens(1,2) ; % UE connection Threshold_data (dB)
 Data_UE_rate = 0.4; % Ratio of data requests by UE
 Tx_power = 40; % BTS power (dBm)  
 Tx_a_gain = 18; % Antenna gain (dBi) 
 Tx_c_loss = 2.5; % Antenna  cable loss (dB)
-Rx_body_loss = 3; % Body loss at reviever side (dB) (User Body Loss Study for Popular Smartphones - http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7228963)
+Rx_body_loss = 3; % Body loss at reciever side (dB) (User Body Loss Study for Popular Smartphones - http://ieeexplore.ieee.org/stamp/stamp.jsp?arnumber=7228963)
 Tx_EiRP = Tx_power + Tx_a_gain - Tx_c_loss; % Effective isotropic radiated power (dBm)
 
 %% Create UE positions and their distances
@@ -58,17 +58,6 @@ figure (1);
         end 
     end
     
-
-%% Pathloss vs Distance graph for Cost-231 model
-figure (2);
-    Distance = linspace(0,Cell_size,1000); % 0-2Km, 1K sample
-    plot(Distance, A + B*log10(Distance/1000) + C); % Distance in Km
-    title({'Pathloss vs Distance (Cost-231)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
-    xlabel('Distance in meter');
-    ylabel('Pathloss in dB');
-    clear Distance;
-    grid on;
-
 %% Cumulative distribution of received power
     figure (3);
         ecdf(UE_database(:,4));
@@ -85,13 +74,13 @@ figure (2);
         ylabel('Count');
         grid on;
         
-%% Coverage graph
+%% Coverage graph voice
 Sample_size = 1000;       
 Distance = linspace(0, Cell_size, Sample_size); % 0-2Km, 1K sample
 Coverage = zeros(1, Sample_size);
-for i=1:1000
+for i=1:Sample_size
     Pathloss_formula = A + B*log10((Distance(i)./1000)*ones(Sample_size, 1)) + C; % Distance in Km; (Sample_size, 1) matrix
-    Shadowing_eff = normrnd (0, 12, [Sample_size, 1] ); % (Sample_size, 1) matrix
+    Shadowing_eff = normrnd (0, sqrt(12), [Sample_size, 1] ); % (Sample_size, 1) matrix
     Power = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss; % Received power by UE 
     Coverage(i) = length(find(Power > Threshold_voice))/Sample_size; % Find connected UE number
 end
@@ -100,6 +89,28 @@ figure (5);
     plot (Distance, smooth(Coverage)) % Moving average smoothing
     axis([-inf +inf 0 1]) % fix y axis between 0 and 1
     grid on;
-    title({'Coverage probability vs Distance';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
+    title({'Coverage probability vs Distance (voice)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
     xlabel('Distance (m)');
     ylabel('Probability');
+    
+    
+%% Coverage graph data
+Sample_size = 1000;       
+Distance = linspace(0, Cell_size, Sample_size); % 0-2Km, 1K sample
+Coverage = zeros(1, Sample_size);
+for i=1:Sample_size
+    Pathloss_formula = A + B*log10((Distance(i)./1000)*ones(Sample_size, 1)) + C; % Distance in Km; (Sample_size, 1) matrix
+    Shadowing_eff = normrnd (0, sqrt(12), [Sample_size, 1] ); % (Sample_size, 1) matrix
+    Power = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss; % Received power by UE 
+    Coverage(i) = length(find(Power > Threshold_data))/Sample_size; % Find connected UE number
+end
+clear Power Pathloss_formula Shadowing_eff Sample_size
+figure (6);
+    plot (Distance, smooth(Coverage)) % Moving average smoothing
+    axis([-inf +inf 0 1]) % fix y axis between 0 and 1
+    grid on;
+    title({'Coverage probability vs Distance (data)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-data=' num2str(Threshold_sata) 'dB']});
+    xlabel('Distance (m)');
+    ylabel('Probability'); 
+    
+    
