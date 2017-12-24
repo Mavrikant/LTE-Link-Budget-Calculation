@@ -90,6 +90,7 @@ figure (5);
     axis([-inf +inf 0 1]) % fix y axis between 0 and 1
     grid on;
     title({'Coverage probability vs Distance (voice)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-voice=' num2str(Threshold_voice) 'dB']});
+<<<<<<< HEAD
     xlabel('Distance (m)');
     ylabel('Probability');
     
@@ -114,3 +115,29 @@ figure (6);
     ylabel('Probability'); 
     
     
+=======
+    xlabel('Distance (m)');
+    ylabel('Probability');
+    
+    
+%% Coverage graph data
+Sample_size = 1000;       
+Distance = linspace(0, Cell_size, Sample_size); % 0-2Km, 1K sample
+Coverage = zeros(1, Sample_size);
+for i=1:Sample_size
+    Pathloss_formula = A + B*log10((Distance(i)./1000)*ones(Sample_size, 1)) + C; % Distance in Km; (Sample_size, 1) matrix
+    Shadowing_eff = normrnd (0, sqrt(12), [Sample_size, 1] ); % (Sample_size, 1) matrix
+    Power = Tx_EiRP - Pathloss_formula - Shadowing_eff - Rx_body_loss; % Received power by UE 
+    Coverage(i) = length(find(Power > Threshold_data))/Sample_size; % Find connected UE number
+end
+clear Power Pathloss_formula Shadowing_eff Sample_size
+figure (6);
+    plot (Distance, smooth(Coverage)) % Moving average smoothing
+    axis([-inf +inf 0 1]) % fix y axis between 0 and 1
+    grid on;
+    title({'Coverage probability vs Distance (data)';['URBAN, Cost-231 Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, Threshold-data=' num2str(Threshold_sata) 'dB']});
+    xlabel('Distance (m)');
+    ylabel('Probability'); 
+    
+    
+>>>>>>> origin/master
