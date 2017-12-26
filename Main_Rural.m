@@ -2,27 +2,24 @@ clc;
 clear variables;
 close all;
 
-
 x0=0;
 y0=0;
-Cell_size = 20000; % Macro cell (m)
-rangeblocks=500:500:Cell_size;
+Cell_size = 15000; % Macro cell (m)
+Coverage_resolution=200;
+rangeblocks=Coverage_resolution:Coverage_resolution:Cell_size;
 
 temp=zeros(length(rangeblocks),1);
-a=1;
-while (a<=1)
+a=20;
+Monte_Carlo=20
+while (a<=Monte_Carlo)
 RE_number = 100/(71.4*10^-6)*12*0.85;
 Fc = 900; % Carrier freq (Mhz) (for LTE in Turkey: 800, 900, 1800, 2100, 2600(only indoor femtocell) 
-
-
 H_bts = 30; % Height of BTS; http://ftp.tiaonline.org/TR-8/TR-8.18.4/Working/WG4-8.18.4_16-05-039-R6%20LTE%20Transmitter%20Characteristics.pdf
 H_ue = 3; % Height of user equipment
 UE_density =2; %Active user density (/km2)
 UE_number = floor(UE_density*(pi*(Cell_size/1000)^2)); % User equipment (phone, tablet ...) number
-Threshold_voice= Rec_sens(1,1) ; % UE connection Threshold_voice (dB)
-Threshold_data= Rec_sens(1,2) ; % UE connection Threshold_data (dB)
-Data_UE_rate = 0.5; % Ratio of data requests by UE
 Data_request= 8*1024*1024; %1Mbps
+Data_UE_rate = 0.5; % Ratio of data requests by UE
 Voice_request= 7*1024 ; %7Kbps
 Tx_power = 46; % BTS power (dBm)  
 Tx_a_gain = 18; % Antenna gain (dBi) 
@@ -107,7 +104,7 @@ figure (8);
     end
 for i=1:UE_number
     for j=1:length(rangeblocks)
-        if(UE_database(i,3)<j*500 && UE_database(i,3)>(j-1)*500)
+        if(UE_database(i,3)<j*Coverage_resolution && UE_database(i,3)>(j-1)*Coverage_resolution)
              Coverage(j,1)=Coverage(j,1)+1;
              if(UE_database(i,8)==1)
                  Coverage(j,2)=Coverage(j,2)+1;
@@ -121,8 +118,10 @@ temp(:,a)=Coverage(:,3);
 a=a+1;
 a
 end
+
+
 avgmat=mean(temp,2);
 figure (5);
 plot(rangeblocks,avgmat);
-title(['RURAL, HATA Model, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB, User density=' num2str(UE_density) 'user per km^2,Data User Datarate=' num2str(Data_request) 'bps,Voice User Datarate=' num2str(Voice_request) 'bps,Data user to Voice user ratio=' num2str(Data_UE_rate) ])
+title({['RURAL, Fc=' num2str(Fc) 'Mhz, H-bts=' num2str(H_bts) 'm, Tx-power=' num2str(Tx_power) 'dB,'];[ 'User density=' num2str(UE_density) '/km^2, Datarate=' num2str(Data_request/1024/1024) 'Mbps, Data/Voice=' num2str(Data_UE_rate) ]})
     
